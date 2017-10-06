@@ -331,10 +331,72 @@
 							<div data-markdown>
 									```
 									const admin = require('firebase-admin');
-									admin.initializeApp(functions.config().firebase); //COnfiguración automática de Firebase Admin SDK
+									admin.initializeApp(functions.config().firebase); //Configuración automática de Firebase Admin SDK
 									```
 							</div>
 						</div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>IMPLEMENTACIÓN FUNCIÓN DE BIENVENIDA A NUEVOS USUARIOS</h1>
+					</section>
+					<section>
+						<h2>FIREBASE FUNCTIONS</h2>
+						<p>Este módulo permite escribir las reglas de trigger de Cloud Functions.</p>
+						<div class="fragment">
+							<div data-markdown>
+								```
+								const functions = require('firebase-functions');
+								```
+							</div>
+						</div>
+					</section>
+					<section>
+						<h2>MENSAJE DE BIENVENIDA A NUEVOS USUARIOS</h2>
+						<p>La siguiente funcíón crea un mensaje de bienvenida para nuevos usuarios del chat.</p>
+						<p class="fragment">La función es activada cada vez que un usuario inicia sesión por primera vez. De esto se encarga el siguiente trigger:</p>
+						<div class="fragment">
+							<div data-markdown>
+									```
+									functions.auth().onCreate
+									```
+							</div>
+						</div>
+					</section>
+					<section>
+						<h2>MENSAJE DE BIENVENIDA A NUEVOS USUARIOS (CÓDIGO)/h2>
+						<div data-markdown class="fragment" ">
+							```
+							// Añade un mensaje de bienvenida a nuevos usuarios del chat
+exports.addWelcomeMessages = functions.auth.user().onCreate( event => { // La función se activa cuando se crea un usuario
+																		// Exports permite que la función sea visible desde fuera del archivo
+	const user = event.data; // Guarda el evento de creación de usuario
+	console.log('Un nuevo usuario ha iniciado sesión por primera vez'); // Muestra un mensaje en consola indicando que entró un nuevo usuario
+	const fullName = user.displayName || 'Anónimo'; // Obtiene el nombre del usuario o 'Anónimo'
+
+	// Almacena el nuevo mensaje de bienvenida en la base de datos que luego se muestra en los clientes del chat
+	return admin.database().ref('messages').push({ // El mensaje se almacena en la base de datos que guarda los mensajes
+		name: 'Firebase Bot', // El mensaje se muestra como uno enviado por Firebase Bot
+		photoUrl: '/images/firebase-logo.png', // La foto de perfil de Firebase Bot es el logo de Firebase
+		text: fullName+' ha iniciado sesión por primera vez. ¡Bienvenido!' //Muestra el mensaje de bienvenida, utilizando el nombre almacenado
+	});
+}); // Dado que es asíncrona, se debe retornar la Promesa indicando cuando ha finalizado la escritura en Realtime Database
+							```
+						</div>
+					</section>
+					<section>
+						<h2>DESPLEGAR LA FUNCIÓN</h2>
+						<div data-markdown>
+								```
+								firebase deploy --only functions
+								```
+						</div>
+					</section>
+					<section>
+						<h2>DESPLEGAR LA FUNCIÓN</h2>
+						<img src="images/4.png">
 					</section>
 				</section>
 			</div>
