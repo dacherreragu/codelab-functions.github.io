@@ -235,6 +235,78 @@
 						<img class="fragment" src="images/3.png">
 					</section>
 				</section>
+
+				<section>
+					<section>
+						<h1>INSTALAR FIREBASE COMMAND LINE INTERFACE (CLI)</h1>
+					</section>
+					<section>
+						<h2>INSTALAR FIREBASE CLI</h2>
+						<p>Antes de instalar FIrebase CLI, se debe tener NPM instalado.</p>
+						<div class="fragment">
+							<p>Instalar o mejorar Firebase CLI:</p>
+							<div data-markdown>
+								```
+								npm -g install firebase-tools
+								```
+							</div>
+						</div>
+					</section>
+					<section>
+						<h2>INSTALAR FIREBASE CLI</h2>
+						<div class="fragment">
+							<p>Verificar la versión de Firebase (Debe ser 3.5 o superior):</p>
+							<div data-markdown>
+								```
+								firebase --version
+								```
+							</div>
+						</div>
+						<div class="fragment">
+							<p>Autorizar Firebase CLI:</p>
+							<div data-markdown>
+								```
+								firebase login
+								```
+							</div>
+						</div>
+						<div class="fragment">
+							<p>Para seleccionar el proyecto a usar:</p>
+							<div data-markdown>
+								```
+								firebase use --add
+								```
+							</div>
+						</div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>DIRECTORIO DE FIREBASE FUNCTIONS</h1>
+					</section>
+					<section>
+						<h2>DIRECTORIO DE FIREBASE FUNCTIONS</h2>
+						<p>Cuando se usa el SDK de Firebase Functions, el código de la aplicación se usa en la carpeta <i>functions</i>.</p>
+						<div class="fragment">
+							<p>El código de las funciones necesita estar en la misma carpeta de un archivo generado:</p>
+							<div data-markdown>
+								```
+								package.json
+								```
+							</div>
+						</div>
+					</section>
+					<section>
+						<h2>DIRECTORIO DE FIREBASE FUNCTIONS</h2>
+						<p>Dentro del directorio <i>functions</i> se debe correr el comando</p>
+						<div data-markdown>
+								```
+								npm install
+								```
+							</div>
+					</section>
+				</section>
 			</div>
 		</div>
 
