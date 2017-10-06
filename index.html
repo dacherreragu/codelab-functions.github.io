@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Point Cloud</title>
+		<title>Codelab Firebase Functions</title>
 
 		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
 		<meta name="author" content="Hakim El Hattab">
@@ -132,90 +132,37 @@
 					
 				<section>
 					<section>
-						<h1>POINT CLOUD</h1>
+						<h1>CREAR PROYECTO</h1>
 					</section>
 					<section>
-						<h2>Overview</h2>
-						<p>We’re using the 3D capabilities of Processing to draw points in space.</p>
-						<div class="fragment">You’ll want to familiarize yourself with:</div>
+						<h2>CREAR PROYECTO EN CONSOLA</h2>
+						<p>EN la consola de Firebase hay que crear un proyecto nuevo llamado <i>FriendlyChat</i>, al cual se le asigna un ID único con la forma </p>
 						<div class="fragment" data-markdown>
 							```
-							translate()
-							rotate()
-							pushMatrix()
-							popMatrix()
+							friendlychat-1234
 							```
 						</div>
 					</section>
 					<section>
-						<h2>Raw depth values</h2>
-						<p>Rather than do this calculation all the time, we can precompute all of these values in a lookup table since there are only 2048 depth values.</p>
+						<h2>ACTIVAR GOOGLE AUTH</h2>
+						<p>En la consola Firebase, abrir la sección</p>
 						<div class="fragment" data-markdown>
 							```
-							depthInMeters = 1.0 / (rawDepth * -0.0030711016 + 3.3309495161);
+							AUTHENTICATION > SIGN IN METHOD
+							```
+						</div>
+						<p>Dar clic en</p>
+						<div class="fragment" data-markdown>
+							```
+							ENABLE > SAVE
 							```
 						</div>
 					</section>
+						<h2>ACTIVAR GOOGLE AUTH</h2>
+						<img src="images/1.png">
 					<section>
-						<h2>Raw depth values</h2>
-						<p>The raw depth values from the kinect are not directly proportional to physical depth. Rather, they scale with the inverse of the depth according to this formula:</p>
-						<div class="fragment" data-markdown>
-							```
-							float[] depthLookUp = new float[2048];
-
-							for (int i = 0; i < depthLookUp.length; i++) {
-  								depthLookUp[i] = rawDepthToMeters(i);
-							}
-							float rawDepthToMeters(int depthValue) {
-  								if (depthValue < 2047) {
-    									return (float)(1.0 / ((double)(depthValue) * -0.0030711016 + 3.3309495161));
-  								}
-  								return 0.0f;
-							}
-							```
-						</div>
-					</section>
-					<section>
-						<h2>Raw depth values</h2>
-						<p>Thanks to <a href="http://graphics.stanford.edu/~mdfisher/Kinect.html" target="_blank">Matthew Fisher</a> for the above formula.</p>
-						<p><span class="fragment">Note:</span> <span class="fragment">For the results to be more accurate, you would need to calibrate your specific kinect device.</span></p>
-					</section>
-					<section>
-						<h2>Point cloud</h2>
-						<p>Finally, we can draw some points based on the depth values in meters:</p>
-						<div class="fragment" data-markdown>
-							```
-							for(int x = 0; x < w; x += skip) {
-    								for(int y = 0; y < h; y += skip) {
-     							 		int offset = x + y * kinect.width;
-
-      									// Convert kinect data to world xyz coordinate
-      									int rawDepth = depth[offset];
-      									PVector v = depthToWorld(x, y, rawDepth);
-
-      									stroke(255);
-     									pushMatrix();
-      									// Scale up by 200
-     									float factor = 200;
-      									translate(v.x * factor, v.y * factor, factor-v.z * factor);
-      									// Draw a point
-      									point(0,0);
-      									popMatrix();
-    								}
-  							}
-							```
-						</div>
-					</section>
-					<section>
-						<h2>Obtained result</h2>
-						<img src="images/result.png">
-					</section>
-					<section>
-						<h2>Related video</h2>
-						<p>The following video is a great resource for this implementation:</p>
-						<iframe width="600" height="400" src="https://www.youtube.com/embed/E1eIg54clGo" frameborder="0" allowfullscreen class="fragment"></iframe>
-					</section>
 				</section>
+
 				<section>
 					<section>
 						<h2>References</h2>
