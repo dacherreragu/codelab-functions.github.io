@@ -497,7 +497,7 @@ exports.blurOffensiveImages = functions.storage.object().onChange(event => { // 
 					<section>
 						<h2>NOTIFICACIONES DE NUEVO MENSAJE</h2>
 						<p>Para poder probar esta implementación, es necesario que las notificaciones del sitio web estén activadas.</p>
-						<div class="fragment">
+						<div data-markdown class="fragment">
 							<p>Para detectar cuándo se escriben mensajes nuevos, se utiliza el comando</p>
 							```
 							functions.database().path().onWrite
@@ -506,8 +506,9 @@ exports.blurOffensiveImages = functions.storage.object().onChange(event => { // 
 					</section>
 					<section>
 						<h2>NOTIFICACIONES DE NUEVO MENSAJE (CÓDIGO)</h2>
-						```
-						// Envía notificaciones a todos los usuarios cuando un mensaje ha sido posteado
+						<div data-markdown>
+							```
+							// Envía notificaciones a todos los usuarios cuando un mensaje ha sido posteado
 exports.sendNotifications = functions.database.ref('/messages/{messageId}').onWrite(event => { // Se activa cuando un nuevo mensaje se
 																							   // guarda en la base de datos
   const snapshot = event.data;
@@ -553,7 +554,8 @@ exports.sendNotifications = functions.database.ref('/messages/{messageId}').onWr
     }
   });
 });
-						```
+							```
+						</div>
 					</section>
 					<section>
 						<h2>DESPLEGAR LA FUNCIÓN</h2>
