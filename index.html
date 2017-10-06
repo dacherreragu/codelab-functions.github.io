@@ -136,8 +136,8 @@
 					</section>
 					<section>
 						<h2>CREAR PROYECTO EN CONSOLA</h2>
-						<p>EN la consola de Firebase hay que crear un proyecto nuevo llamado <i>FriendlyChat</i>, al cual se le asigna un ID único con la forma </p>
-						<div class="fragment" data-markdown>
+						<p>En la consola de Firebase hay que crear un proyecto nuevo llamado <i>FriendlyChat</i>, al cual se le asigna un ID único con la forma </p>
+						<div data-markdown>
 							```
 							friendlychat-1234
 							```
@@ -146,13 +146,13 @@
 					<section>
 						<h2>ACTIVAR GOOGLE AUTH</h2>
 						<p>En la consola Firebase, abrir la sección</p>
-						<div class="fragment" data-markdown>
+						<div data-markdown>
 							```
 							AUTHENTICATION > SIGN IN METHOD
 							```
 						</div>
 						<p>Dar clic en</p>
-						<div class="fragment" data-markdown>
+						<div data-markdown>
 							```
 							ENABLE > SAVE
 							```
@@ -166,12 +166,45 @@
 
 				<section>
 					<section>
-						<h2>References</h2>
-						<ul>
-							<li class="fragment"><a href="https://es.wikipedia.org/wiki/Kinect" target="_blank">Kinect</a>.</li>
-							<li class="fragment"><a href="https://processing.org/" target="_blank">Processing</a>.</li>
-							<li class="fragment"><a href="http://shiffman.net/p5/kinect/" target="_blank">Getting Started with Kinect and Processing</a>.</li>
-						</ul>
+						<h1>INSTALAR FIREBASE COMMAND LINE INTERFACE (CLI)</h1>
+					</section>
+					<section>
+						<h2>INSTALAR FIREBASE CLI</h2>
+						<p>Antes de instalar FIrebase CLI, se debe tener NPM instalado.</p>
+						<div class="fragment">
+							<p>Instalar o mejorar Firebase CLI:</p>
+							<div data-markdown>
+								```
+								npm -g install firebase-tools
+								```
+							</div>
+						</div>
+					</section>
+					<section>
+						<h2>INSTALAR FIREBASE CLI</h2>
+						<div class="fragment">
+							<p>Verificar la versión de FIrebase (Debe ser 3.5 o superior):</p>
+							<div data-markdown>
+								```
+								firebase --version
+								```
+							</div>
+						</div>
+						<div class="fragment">
+							<p>Autorizar Firebase CLI:</p>
+							<div data-markdown>
+								```
+								firebase login
+								```
+							</div>
+						</div>
+						<div class="fragment">
+							<p>Para seleccionar el proyecto a usar:</p>
+							<div data-markdown>
+								```
+								firebase use --add
+							</div>
+						</div>
 					</section>
 				</section>
 			</div>
