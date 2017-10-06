@@ -489,6 +489,90 @@ exports.blurOffensiveImages = functions.storage.object().onChange(event => { // 
 						</div>
 					</section>
 				</section>
+
+				<section>
+					<section>
+						<h1>NOTIFICACIONES DE NUEVO MENSAJE</h1>
+					</section>
+					<section>
+						<h2>NOTIFICACIONES DE NUEVO MENSAJE</h2>
+						<p>Para poder probar esta implementación, es necesario que las notificaciones del sitio web estén activadas.</p>
+						<div class="fragment">
+							<p>Para detectar cuándo se escriben mensajes nuevos, se utiliza el comando</p>
+							```
+							functions.database().path().onWrite
+							```
+						</div>
+					</section>
+					<section>
+						<h2>NOTIFICACIONES DE NUEVO MENSAJE (CÓDIGO)</h2>
+						```
+						// Envía notificaciones a todos los usuarios cuando un mensaje ha sido posteado
+exports.sendNotifications = functions.database.ref('/messages/{messageId}').onWrite(event => { // Se activa cuando un nuevo mensaje se
+																							   // guarda en la base de datos
+  const snapshot = event.data;
+  // Solo envía notificación cuando un nuevo mensaje ha sido creado
+  if (snapshot.previous.val()) {
+    return;
+  }
+
+  // Detalles de la notificación
+  const text = snapshot.val().text;
+  const payload = {
+    notification: {
+      title: `${snapshot.val().name} ha posteado ${text ? 'un mensaje' : 'una imagen'}`,
+      body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
+      icon: snapshot.val().photoUrl || '/images/profile_placeholder.png',
+      click_action: `https://${functions.config().firebase.authDomain}`
+    }
+  };
+
+  // Tomar la lista de tokens del dispositivo
+  return admin.database().ref('fcmTokens').once('value').then(allTokens => {
+    if (allTokens.val()) {
+      // Enlista todos los tokens
+      const tokens = Object.keys(allTokens.val());
+
+      // Envía notificaciones a todos los tokens
+      return admin.messaging().sendToDevice(tokens, payload).then(response => {
+        // Para cada mensaje, verifica si tiene un error
+        const tokensToRemove = [];
+        response.results.forEach((result, index) => {
+          const error = result.error;
+          if (error) {
+            console.error('Falló enviando notificación a', tokens[index], error);
+            // Limpia los tokens que no han sido registrados
+            if (error.code === 'messaging/invalid-registration-token' ||
+                error.code === 'messaging/registration-token-not-registered') {
+              tokensToRemove.push(allTokens.ref.child(tokens[index]).remove());
+            }
+          }
+        });
+        return Promise.all(tokensToRemove);
+      });
+    }
+  });
+});
+						```
+					</section>
+					<section>
+						<h2>DESPLEGAR LA FUNCIÓN</h2>
+						<p>Para poder la función, se utiliza el comando</p>
+						```
+						firebase deploy --only functions
+						```
+					</section>
+					<section>
+						<h2>PRUEBA</h2>
+						<p>Dos cuentas están en el chat, y desde una de ellas se envía un mensaje.</p>
+						<img src="/images/6.png">
+					</section>
+					<section>
+						<h2>PRUEBA</h2>
+						<p>EN la otra cuenta, llega una notificación que indica que otro usuario ha escrito un mensaje.</p>
+						<img src="/images/7.png">
+					</section>
+				</section>
 			</div>
 		</div>
 
