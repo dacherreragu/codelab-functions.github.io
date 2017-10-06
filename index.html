@@ -403,6 +403,92 @@ exports.addWelcomeMessages = functions.auth.user().onCreate( event => { // La fu
 						<img src="images/5.png">
 					</section>
 				</section>
+
+				<section>
+					<section>
+						<h1>MODERACIÓN DE IMÁGENES</h1>
+					</section>
+					<section>
+						<h2>PROBLEMA CON CLOUD VISION</h2>
+						<p>Para usar Cloud Vision se debe pagar, por lo cual no se puede ver el funcionamiento. Sin embargo, a continuación estará el código de la implementación.</p>
+					</section>
+					<section>
+						<h2>FUNCIÓN PARA DIFUMINAR (CÓDIGO)</h2>
+						<div data-markdown>
+								```
+								//Usar Cloud Vision tiene costo
+// Difuminar las imágenes subidas que sean detectadas como violentas o para adultos.
+function blurImage(filePath, bucketName, metadata) { //Difumina la imagen
+  const tempLocalFile = path.join(os.tmpdir(), path.basename(filePath));
+  const messageId = filePath.split(path.sep)[1];
+  const bucket = gcs.bucket(bucketName);
+
+  // Download file from bucket.
+  return bucket.file(filePath).download({destination: tempLocalFile})
+    .then(() => {
+      console.log('La imagen ha sido descargada a', tempLocalFile);
+      // Difumina la imagen usando ImageMagick.
+      return spawn('convert', [tempLocalFile, '-channel', 'RGBA', '-blur', '0x24', tempLocalFile]);
+    }).then(() => {
+      console.log('La imagen ha sido difuminada');
+      // SUbe la imagen difuminada
+      return bucket.upload(tempLocalFile, {destination: filePath});
+    }).then(() => {
+      console.log('Blurred image has been uploaded to', filePath);
+      // Borra el archivo locla para liberar memoria
+      fs.unlinkSync(tempLocalFile);
+      console.log('Archivo local borrado.');
+      // Indica que el mensaje fue moderado
+      return admin.database().ref(`/messages/${messageId}`).update({moderated: true});
+    }).then(() => {
+      console.log('Se marca la imagen como moderada en la base de datos.');
+    });
+}
+								```
+						</div>
+					</section>
+					<section>
+						<h2>FUNCIÓN PARA ANALIZAR LA IMAGEN (CÓDIGO)</h2>
+						<div data-markdown>
+								```
+								// Cloud Vision tiene costo
+// Difumina imágenes ofensivas y las sube a Firebase Storage
+exports.blurOffensiveImages = functions.storage.object().onChange(event => { // La función se activa cuando se sube una imagen a Storage
+	const object = event.data;
+	// Sale si es un evento de borrado o de despliegue
+	if (object.resourceState === 'not_exists') {
+		return console.log('Es un evento de borrado.');
+	} else if (!object.name) {
+		return console.log('Es un evento de despliegue.');
+	}
+
+	/*
+	const image = gcs.bucket(object.bucket).file(object.name);
+	*/
+
+	const image = {
+    	//source: {imageUri: 'gs://${object.bucket}/${object.name}'}
+    	source: {imageUri: `gs://${object.bucket}/${object.name}`}
+  	};
+
+  	// Revisar la imagen usando Cloud Vision API.
+  	return vision.safeSearchDetection(image).then(batchAnnotateImagesResponse => {
+    	const safeSearchResult = batchAnnotateImagesResponse[0].safeSearchAnnotation; // Guarda la definición dada a la imagen
+    	if (safeSearchResult.adult === 'LIKELY' || // Si la imagen es inapropiada...
+    		safeSearchResult.adult === 'VERY_LIKELY' ||
+        	safeSearchResult.violence === 'LIKELY' ||
+        	safeSearchResult.violence === 'VERY_LIKELY') {
+        	console.log('La imagen', object.name, 'ha sido detectada como inapropiada.');
+      		return blurImage(object.name, object.bucket); // Difumina las imágenes inapropiadas
+    	} else {
+    		console.log('La imagen', object.name,'ha sido detectada como apropiada.');
+    	}
+	});
+});
+								```
+						</div>
+					</section>
+				</section>
 			</div>
 		</div>
 
