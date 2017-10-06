@@ -307,6 +307,36 @@
 							</div>
 					</section>
 				</section>
+
+				<section>
+					<section>
+						<h1>IMPORTAR LOS MÓDULOS DE CLOUD FUNCTIONS Y FIREBASE ADMIN</h1>
+					</section>
+					<section>
+						<h2>FIREBASE FUNCTIONS</h2>
+						<p>Este módulo permite escribir las reglas de trigger de Cloud Functions.</p>
+						<div class="fragment">
+							<div data-markdown>
+								```
+								const functions = require('firebase-functions');
+								```
+							</div>
+						</div>
+					</section>
+					<section>
+						<h2>FIREBASE ADMIN</h2>
+						<p>Permite usar la plataforma Firebase en un servidor con acceso de administrador.</p>
+						<div class="fragment">
+							<p>Por ejemplo, sirve para escribir en Realtime Database o enviar notificaciones FCM.</p>
+							<div data-markdown>
+									```
+									const admin = require('firebase-admin');
+									admin.initializeApp(functions.config().firebase); //COnfiguración automática de Firebase Admin SDK
+									```
+							</div>
+						</div>
+					</section>
+				</section>
 			</div>
 		</div>
 
